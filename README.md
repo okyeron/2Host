@@ -23,4 +23,6 @@ software on any computer
 
 [BOM](hardware/BOM.md)
 
+## PCBs
 
+PCBs are available for sale in my shop
