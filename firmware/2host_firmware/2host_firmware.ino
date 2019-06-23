@@ -1,4 +1,4 @@
-/* Create a "class compliant " USB to 3 MIDI IN and 3 MIDI OUT interface.
+/* Create a "class compliant " USB to 1 MIDI IN and 1 MIDI OUT interface.
 
    MIDI receive (6N138 optocoupler) input circuit and series resistor
    outputs need to be connected to Serial1, Serial2 and Serial3.
