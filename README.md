@@ -6,14 +6,18 @@
 
 Here are a few examples of usbmidi hosts which could be connected together:
 
--norns
--organelle
--orca
--ansible (needs testing)
--ipad (with Camera Connection kit)
--ableton or other DAW on your computer
--raspberry pi (pisound, etc.)
--etc.
+hardware    
+- norns 
+- organelle 
+- ansible (needs testing) 
+- ipad (with Camera Connection kit) 
+- raspberry pi (pisound, etc.) 
+
+software on any computer  
+- ableton 
+- orca  
+- VCV Rack 
+- etc. 
 
 ## Build and BOM
 

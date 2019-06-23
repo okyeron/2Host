@@ -14,8 +14,7 @@
 ## Build notes
 
 * pin header can be whatever you have around. I get 1x40 headers in bulk from Tayda. Mouser has a 1x20 here [855-M20-9994045](https://www.mouser.com/ProductDetail/Harwin/M20-9994045?qs=%2Fha2pyFaduhF0xjSTgJg%252BrgY%252BmALgk%2FsNJjZomxYmF5SO6%252BK1RqInQ%3D%3D). Basically you need at least 2 1x3 headers to connect the Teensy's I also used a couple 1x2 headers as supports.
-
-Don't bother soldering pin headers to all the pins on the Teensies. You only need the last three pins on the USB connector end. (shown with white markings on the board)
+* Don't bother soldering pin headers to all the pins on the Teensies. You only need the last three pins on the USB connector end. (shown with white markings on the board)
 
 ![<2host-top>](<2host-top.png>)
 ![<2host-top>](<2host-bottom.png>)
