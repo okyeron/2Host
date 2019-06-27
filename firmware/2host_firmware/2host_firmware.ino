@@ -3,7 +3,7 @@
    MIDI receive (6N138 optocoupler) input circuit and series resistor
    outputs need to be connected to Serial1, Serial2 and Serial3.
 
-   You must select MIDIx4 from the "Tools > USB Type" menu
+   You must select MIDI from the "Tools > USB Type" menu
 
    This example code is in the public domain.
 */
@@ -18,7 +18,7 @@ elapsedMillis ledOnMillis;
 
 
 void setup() {
-  Serial.begin(115200);
+  //Serial.begin(115200);
   pinMode(13, OUTPUT); // LED pin
   digitalWrite(13, LOW);
   MIDI1.begin(MIDI_CHANNEL_OMNI);
@@ -42,7 +42,7 @@ void loop() {
 
     if (type == midi::Clock) {
       // no led activity on clock
-      Serial.println("clock");
+      //Serial.println("clock");
       activity = false;
       ledOnMillis = 0;
     } else {
