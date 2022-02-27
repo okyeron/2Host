@@ -18,7 +18,7 @@ elapsedMillis ledOnMillis;
 
 
 void setup() {
-  //Serial.begin(115200);
+  Serial.begin(115200);
   pinMode(13, OUTPUT); // LED pin
   digitalWrite(13, LOW);
   MIDI1.begin(MIDI_CHANNEL_OMNI);
