@@ -23,10 +23,14 @@ Adafruit_USBD_MIDI usb_midi;
 MIDI_CREATE_INSTANCE(HardwareSerial, Serial1, MIDI1);       // MIDI1 is Hardware MIDI
 MIDI_CREATE_INSTANCE(Adafruit_USBD_MIDI, usb_midi, MIDI2);  // MIDI2 is USB MIDI
 
+int MIDI_OUT_CH = 9;  // pick your midi output channel here
+
 Adafruit_NeoPixel onePixel = Adafruit_NeoPixel(1, 11, NEO_GRB + NEO_KHZ800);
 
 // A variable to know how long the LED has been turned on
 elapsedMillis ledOnMillis;
+elapsedMillis button_msec = 0;
+unsigned long buttonInterval = 120 ;
 
 bool activity = false;
 
@@ -58,6 +62,15 @@ int buttonHome;
 int triggerLeft;
 int triggerRight;
 
+bool padLeftOn = false;
+bool padRightOn = false;
+bool padUpOn = false;
+bool padDownOn = false;
+bool buttonXOn = false;
+bool buttonYOn = false;
+bool buttonAOn = false;
+bool buttonBOn = false;
+
 // GUITAR
 int whammyBar;
 int minusButton;  // drop an octave w each press
@@ -71,38 +84,45 @@ bool strumDownOn = 0;
 bool strumUpOn = 0;
 bool fretButtonOn[] = {0, 0, 0, 0, 0};
 
-int octave = 12;  // note offset value, used to change octaves
+int lastJoyX = 32;  // resting value of joyX
+int joyXCCNum = 71; // VCF or whatever you assign in synth software
+int joyXCCVal = 0;
+int lastJoyY = 32;  // resting value of joyY
+int joyYCCNum = 72; // VCA
+int joyYCCVal = 0;
 
+int octave = 12;  // note offset value, used to change octaves
 const char* controller[] = {"unknown ", "NUNCHUCK", "WIICLASSIC", "GuitarHeroController","GuitarHeroWorldTourDrums","DrumController","DrawsomeTablet","Turntable"};
 
 void setup() {
-//	pad_with_nulls(mfgstr, 32);
-//	pad_with_nulls(prodstr, 32);
+	Serial.begin(115200);
+
+	pad_with_nulls(mfgstr, 32);
+	pad_with_nulls(prodstr, 32);
 	USBDevice.setManufacturerDescriptor(mfgstr);
 	USBDevice.setProductDescriptor(prodstr);
-  
-	nunchuck1.begin();
-	Serial.println(nunchuck1.type);
-	
-//	if (nunchuck1.type == Unknown) {
-//		nunchuck1.type = NUNCHUCK;
-//	}
+  	
 
 	MIDI1.begin(MIDI_CHANNEL_OMNI);
 	MIDI2.begin(MIDI_CHANNEL_OMNI);
 	MIDI1.turnThruOff();
 	MIDI2.turnThruOff();
 
-	Serial.begin(115200);
+
+	nunchuck1.begin();
 
 	// wait until device mounted
-	while ( !USBDevice.mounted() ) delay(1);
+//	while ( !USBDevice.mounted() ) delay(1);
 
+	delay(1500);
+	Serial.println(controller[nunchuck1.type]);
+
+	
 	onePixel.begin();             // Start the NeoPixel object
 	onePixel.clear();             // Set NeoPixel color to black (0,0,0)
 	onePixel.setBrightness(50);   // Affects all subsequent settings
 
-	onePixel.setPixelColor(0, 100, 0, 0);
+	onePixel.setPixelColor(0, 100, 0, 0); // blink an led
 	onePixel.show();
 	delay(200);
 	onePixel.clear();
@@ -113,10 +133,11 @@ void setup() {
 void loop() {
   activity = false;
   int r=0, g=0, b=100;
-  
-  	nunchuck1.readData();    // Read inputs and update maps
-	nunchuck1.printInputs(); // Print all inputs
+ 
 
+  	nunchuck1.readData();    // Read inputs and update maps
+//	nunchuck1.printInputs(); // Print all inputs
+//	Serial.println(nunchuck1.type);
 	switch(nunchuck1.type){
 		case 0: 	// "unknown
 			break;
@@ -130,6 +151,21 @@ void loop() {
 			accelZ = nunchuck1.values[6];
 			buttonZ = nunchuck1.values[10];
 			buttonY = nunchuck1.values[11];
+			
+			// M8 mapping
+			if(joyX!=lastJoyX){
+				joyXCCVal=map(joyX, 190, 255, 0, 127); // remap to bigger range
+				MIDI2.sendControlChange(joyXCCNum, joyXCCVal, MIDI_OUT_CH);
+				lastJoyX=joyX;
+			}
+			if(joyY!=lastJoyY){
+				joyYCCVal=map(joyY, 190, 255, 0, 127); // remap to bigger range
+				MIDI2.sendControlChange(joyYCCNum, joyYCCVal, MIDI_OUT_CH);
+				lastJoyY=joyY;
+			}
+			
+			
+			
 			break;
 		case 2:		// "WIICLASSIC"
 			joyXLeft = nunchuck1.values[0];
@@ -148,6 +184,114 @@ void loop() {
 			buttonHome = nunchuck1.values[15];
 			triggerRight = nunchuck1.values[17];
 			buttonZR = nunchuck1.values[18];
+
+			// M8 mapping
+			if(joyXLeft!=lastJoyX){
+//				Serial.println(joyXLeft);
+				joyXCCVal=map(joyX, 0, 128, 0, 127); // remap to bigger range
+				MIDI1.sendControlChange(joyXCCNum, joyXLeft, MIDI_OUT_CH);
+				MIDI2.sendControlChange(joyXCCNum, joyXLeft, MIDI_OUT_CH);
+				lastJoyX=joyXLeft;
+			}
+			if(joyYLeft!=lastJoyY){
+//				Serial.println(joyYLeft);
+				joyYCCVal=map(joyY, 0, 128, 0, 127); // remap to bigger range
+				MIDI1.sendControlChange(joyYCCNum, joyYLeft, MIDI_OUT_CH);
+				MIDI2.sendControlChange(joyYCCNum, joyYLeft, MIDI_OUT_CH);
+				lastJoyY=joyYLeft;
+			}
+
+		if (button_msec >= buttonInterval){
+
+			// M8 KEY MAPPING
+			if(padLeftRight==0){ // left
+				MIDI1.sendNoteOn(4, 127, MIDI_OUT_CH);
+				MIDI2.sendNoteOn(4, 127, MIDI_OUT_CH);
+				padRightOn = true;
+			} else if (padLeftRight==255){ // right
+				MIDI1.sendNoteOn(5, 127, MIDI_OUT_CH);
+				MIDI2.sendNoteOn(5, 127, MIDI_OUT_CH);
+				padLeftOn = true;
+			}
+			if (padRightOn && padLeftRight==128) {
+				MIDI1.sendNoteOff(4, 0, MIDI_OUT_CH);
+				MIDI2.sendNoteOff(4, 0, MIDI_OUT_CH);
+				padRightOn = false;
+			}
+			if (padLeftOn && padLeftRight==128) {
+				MIDI1.sendNoteOff(5, 0, MIDI_OUT_CH);
+				MIDI2.sendNoteOff(5, 0, MIDI_OUT_CH);
+				padLeftOn = false;
+			}
+			
+			if(padUpDown==0){ // down
+				MIDI1.sendNoteOn(7, 127, MIDI_OUT_CH);
+				MIDI2.sendNoteOn(7, 127, MIDI_OUT_CH);
+				padUpOn = true;
+			} else if (padUpDown==255){ // up
+				MIDI1.sendNoteOn(6, 127, MIDI_OUT_CH);
+				MIDI2.sendNoteOn(6, 127, MIDI_OUT_CH);
+				padDownOn = true;
+			}
+			if (padUpOn && padUpDown==128) {
+				MIDI1.sendNoteOff(7, 0, MIDI_OUT_CH);
+				MIDI2.sendNoteOff(7, 0, MIDI_OUT_CH);
+				padUpOn = false;
+			}
+			if (padDownOn && padUpDown==128) {
+				MIDI1.sendNoteOff(6, 0, MIDI_OUT_CH);
+				MIDI2.sendNoteOff(6, 0, MIDI_OUT_CH);
+				padDownOn = false;
+			}
+			
+			if(buttonY==255 && !buttonYOn){ 			// Y  Option
+				MIDI1.sendNoteOn(3, 127, MIDI_OUT_CH);
+				MIDI2.sendNoteOn(3, 127, MIDI_OUT_CH);
+				buttonYOn = true;
+			}
+			if (buttonYOn && buttonY==0) {
+				MIDI1.sendNoteOff(3, 0, MIDI_OUT_CH);
+				MIDI2.sendNoteOff(3, 0, MIDI_OUT_CH);
+				buttonYOn = false;
+			}
+			
+			if(buttonX==255 && !buttonXOn){ 			// X Edit
+				MIDI1.sendNoteOn(2, 127, MIDI_OUT_CH);
+				MIDI2.sendNoteOn(2, 127, MIDI_OUT_CH);
+				buttonXOn = true;
+			}
+			if (buttonXOn && buttonX==0) {
+				MIDI1.sendNoteOff(2, 0, MIDI_OUT_CH);
+				MIDI2.sendNoteOff(2, 0, MIDI_OUT_CH);
+				buttonXOn = false;
+			}
+			
+			if(buttonB==255 && !buttonBOn){ 			// B - Shift
+				MIDI1.sendNoteOn(1, 127, MIDI_OUT_CH);
+				MIDI2.sendNoteOn(1, 127, MIDI_OUT_CH);
+				buttonBOn = true;
+			}
+			if (buttonBOn && buttonB==0) {
+				MIDI1.sendNoteOff(1, 0, MIDI_OUT_CH);
+				MIDI2.sendNoteOff(1, 0, MIDI_OUT_CH);
+				buttonBOn = false;
+			}
+			
+			if(buttonA==255 && !buttonAOn){ 			// A - Play
+				MIDI1.sendNoteOn(0, 127, MIDI_OUT_CH);
+				MIDI2.sendNoteOn(0, 127, MIDI_OUT_CH);
+				buttonAOn = true;
+			}
+			if (buttonAOn && buttonA==0) {
+				MIDI1.sendNoteOff(0, 0, MIDI_OUT_CH);
+				MIDI2.sendNoteOff(0, 0, MIDI_OUT_CH);
+				buttonAOn = false;
+			}
+		button_msec = 0;
+	}
+
+
+
 			break;
 		case 3:		// "GuitarHeroController" ## UNTESTED
 			fretButtons[0] = nunchuck1.values[10];  // green
