@@ -37,7 +37,7 @@ To load the firmware, connect the QTPy to your computer and then double click th
 See the [firmware-qtpy directory](/firmware-qtpy/qt_2host_firmware) for the appropriate firmware.
 
 
-# Teensy version - (no longer available - info for reference only)
+# Teensy version 
 
 [BOM](hardware_v0.3/BOM.md)
 
