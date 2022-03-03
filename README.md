@@ -22,13 +22,6 @@ software on any computer
 - VCV Rack 
 - etc. 
 
-# Teensy version - Build and BOM
-
-[BOM](hardware_v0.3/BOM.md)
-
-See the [firmware-teensy directory](/firmware-teensy/2host_firmware) for firmware
-
-
 # QTPy version
 
 This version can also be used with the Seeed Studio XIAO board.
@@ -42,5 +35,12 @@ Firmware is available as a pre-compiled UF2 file.
 To load the firmware, connect the QTPy to your computer and then double click the reset button on the QTPy to drop it into bootloader mode. This should now show you a QTPY_BOOT drive on your computer desktop. Drag the UF2 file to QTPY_BOOT and it should dismount/reboot and come back as the QT-2Host.
 
 See the [firmware-qtpy directory](/firmware-qtpy/qt_2host_firmware) for the appropriate firmware.
+
+
+# Teensy version - (no longer available - info for reference only)
+
+[BOM](hardware_v0.3/BOM.md)
+
+See the [firmware-teensy directory](/firmware-teensy/2host_firmware) for firmware
 
 
