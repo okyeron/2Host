@@ -1,12 +1,8 @@
 /* Create a "class compliant " USB to 1 MIDI IN and 1 MIDI OUT interface.
 
-   MIDI receive (6N138 optocoupler) input circuit and series resistor
-   outputs need to be connected to Serial1, Serial2 and Serial3.
+   You must select TinyUSB from the "Tools > USB Stack" menu
 
-   You must select MIDI from the "Tools > USB Type" menu
-
-   This example code is in the public domain.
-*/
+ */
 
 #include <Arduino.h>
 #include <Adafruit_TinyUSB.h>
@@ -33,8 +29,8 @@ char prodstr[32] = "QT-2host";
 
 void setup() {
    //Serial.begin(115200);
-  pad_with_nulls(mfgstr, 32);
-  pad_with_nulls(prodstr, 32);
+//  pad_with_nulls(mfgstr, 32);
+//  pad_with_nulls(prodstr, 32);
   USBDevice.setManufacturerDescriptor(mfgstr);
   USBDevice.setProductDescriptor(prodstr);
   
