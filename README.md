@@ -24,9 +24,12 @@ software on any computer
 
 # QTPy version
 
-This version can also be used with the Seeed Studio XIAO board.
+SMD assembled PCBs are available [for sale in my shop](https://denki-oto.weebly.com/store/p67/qtpy2host.html#/). 
 
-SMD assembled PCBs are available [for sale in my shop](https://denki-oto.weebly.com/store/p67/qtpy2host.html#/)
+Requires two [Adafruit QtPy's](https://www.adafruit.com/qtpy).
+
+Alternately you can use the [Seeeduino XIAO](https://www.seeedstudio.com/Seeeduino-XIAO-Arduino-Microcontroller-SAMD21-Cortex-M0+-p-4426.html) board instead.
+
 
 ### Firmware
 
