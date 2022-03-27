@@ -1,7 +1,14 @@
-/* Create a "class compliant " USB to 1 MIDI IN and 1 MIDI OUT interface.
-
-   You must select TinyUSB from the "Tools > USB Stack" menu
-
+/*  2host - USBMIDI host-to-host adapter.
+ *  2022 steven noreyko
+ *  version 1.5
+ *  
+ *  Create a USB to HARDWARE MIDI IN/OUT interface.
+ *  
+ *  You must select TinyUSB from the "Tools > USB Stack" menu
+ *  
+ *  for XIAO, you must use TinyUSB V0.10.5
+ *  
+ *  
  */
 
 #include <Arduino.h>
@@ -89,7 +96,7 @@ void loop() {
     }
   }
 
- 
+ while(usb_midi.available()){
   if (MIDI2.read()) {
     // get the USB MIDI message, defined by these 5 numbers (except SysEX)
     midi::MidiType type = MIDI2.getType();
@@ -121,6 +128,7 @@ void loop() {
           //MIDI1.sendSysEx(SysExLength, MIDI2.getSysExArray(), true);
     }
   }
+ }
 
   // blink the LED when any activity has happened
   if (activity) {
