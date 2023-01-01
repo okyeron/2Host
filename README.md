@@ -42,7 +42,7 @@ See the [firmware-qtpy directory](/firmware-qtpy/qt_2host_firmware) for the appr
 
 # Teensy version 
 
-[BOM](hardware_v0.3/BOM.md)
+[BOM](/hardware-teensy/BOM.md)
 
 See the [firmware-teensy directory](/firmware-teensy/2host_firmware) for firmware
 
