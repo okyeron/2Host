@@ -26,9 +26,9 @@ software on any computer
 
 SMD assembled PCBs are available [for sale in my shop](https://denki-oto.weebly.com/store/p67/qtpy2host.html#/). 
 
-Requires two [Adafruit QtPy's](https://www.adafruit.com/qtpy).
+Requires two [Adafruit QtPy's](https://www.adafruit.com/qtpy) or [QtPy RP2040's](https://www.adafruit.com/product/4900).
 
-Alternately you can use the [Seeeduino XIAO](https://www.seeedstudio.com/Seeeduino-XIAO-Arduino-Microcontroller-SAMD21-Cortex-M0+-p-4426.html) board instead.
+Alternately you can use the [Seeeduino XIAO](https://www.seeedstudio.com/Seeeduino-XIAO-Arduino-Microcontroller-SAMD21-Cortex-M0+-p-4426.html) but this is not well tested.
 
 
 ### Firmware
