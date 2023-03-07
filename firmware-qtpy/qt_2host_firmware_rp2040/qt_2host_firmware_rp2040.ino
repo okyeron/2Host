@@ -1,7 +1,7 @@
 /*  
  *  QT-2host - USBMIDI host-to-host adapter.
- *  steven noreyko - revised 2022 
- *  version 1.5
+ *  steven noreyko - revised 2023 for RP2040 
+ *  version 1.6
  *  
  *  Create a USBMIDI to HARDWARE MIDI interface.
  *  
@@ -32,7 +32,7 @@ elapsedMillis ledOnMillis;
 
 bool activity = false;
 
-// DEVICE INFO FOR ADAFRUIT M0 or M4 
+// DEVICE INFO FOR TinyUSB
 char mfgstr[32] = "denki-oto";
 char prodstr[32] = "QT-2host";
 

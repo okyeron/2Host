@@ -1,11 +1,11 @@
 /*  
  *  QT-2host - USBMIDI host-to-host adapter.
- *  steven noreyko - revised 2022 
- *  version 1.5
+ *  steven noreyko - updated March 2023
+ *  version 1.6
  *  
  *  Create a USBMIDI to HARDWARE MIDI interface.
  *  
- *  Select QT PY (SAMD21) from the "Tools > Board > Adafruit SAMD (32 bits ARM Cortex...)" menu
+ *  Select QT PY M0 (SAMD21) from the "Tools > Board > Adafruit SAMD (32 bits ARM Cortex...)" menu
  *  
  *  Select TinyUSB from the "Tools > USB Stack" menu
  *  
@@ -30,7 +30,7 @@ elapsedMillis ledOnMillis;
 
 bool activity = false;
 
-// DEVICE INFO FOR ADAFRUIT M0 or M4 
+// DEVICE INFO FOR TinyUSB
 char mfgstr[32] = "denki-oto";
 char prodstr[32] = "QT-2host";
 
@@ -46,7 +46,10 @@ void setup() {
     Serial.begin(115200);
 
     // wait until device mounted
-    while ( !USBDevice.mounted() ) delay(1);
+    // while ( !USBDevice.mounted() ) delay(1);
+    if (!TinyUSBDevice.mounted()){
+    	delay(1000);
+    }
 
     onePixel.begin();                           // Start the NeoPixel object
     onePixel.clear();                           // Set NeoPixel color to black (0,0,0)
@@ -89,7 +92,7 @@ void loop() {
             MIDI2.send(type, data1, data2, channel);
         } else {
             // SysEx messages are special.  The message length is given in data1 & data2
-            unsigned int SysExLength = data1 + data2 * 256;
+            // unsigned int SysExLength = data1 + data2 * 256;
             
             //MIDI2.sendSysEx(SysExLength, MIDI.getSysExArray(), true, 0);
         }
@@ -123,7 +126,7 @@ void loop() {
             
             } else {
                 // SysEx messages are special.  The message length is given in data1 & data2
-                unsigned int SysExLength = data1 + data2 * 256;
+                // unsigned int SysExLength = data1 + data2 * 256;
                 //MIDI1.sendSysEx(SysExLength, MIDI2.getSysExArray(), true);
             }
         }
