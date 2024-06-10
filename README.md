@@ -24,7 +24,7 @@ software on any computer
 
 # QTPy version
 
-SMD assembled PCBs are available [for sale in my shop](https://denki-oto.weebly.com/store/p67/qtpy2host.html#/). 
+SMD assembled PCBs are available [for sale in my shop](https://www.denki-oto.com/store/p67/qtpy2host.html#/). 
 
 Requires two [Adafruit QtPy's](https://www.adafruit.com/qtpy) or [QtPy RP2040's](https://www.adafruit.com/product/4900).
 
